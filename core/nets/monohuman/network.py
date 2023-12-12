@@ -57,7 +57,7 @@ def closest_distance_to_points(
     """
 
     if min_index is not None:
-        p_index = parent[min_index]
+        p_index = parent[min_index.to('cpu')]
         ret = torch.tensor(points - joints[p_index]).reshape(points.shape[0], 3)
         ret = ret.to(torch.float32)
         return ret
@@ -78,7 +78,7 @@ def closest_distance_to_points(
     p = heads + (tails - heads) * torch.clamp(t, 0, 1)
     dists = torch.norm(p - points, dim=-1)
     min_index = dists.argmin(1)#N
-    p_index = parent[min_index]
+    p_index = parent[min_index.to('cpu')]
 
     points = points.squeeze(1)
     ret = torch.tensor(points - joints[p_index]).reshape(points.shape[0], 3)
