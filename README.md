@@ -1,122 +1,98 @@
 # MonoHuman: Animatable Human Neural Field from Monocular Video (CVPR 2023)
+Group 10 - Anurag Naren Kallakunta, Srinivas padigay, Nitin Talluri, Shravan chidrawar
 
-<img src="./assets/teaser.jpg">
+# README for MonoHuman Project in Google Colab
 
+## Introduction
+This README provides step-by-step instructions for setting up and running the MonoHuman project in Google Colab. MonoHuman is a project focused on 3D human pose and shape estimation.
 
-**MonoHuman: Animatable Human Neural Field from Monocular Video**<br>
-[Zhengming Yu](https://yzmblog.github.io/),
-[Wei Cheng](#),
-[Xian Liu](https://alvinliu0.github.io/),
-[Wayne Wu](https://wywu.github.io/),
-and [Kwan-Yee Lin](https://kwanyeelin.github.io/)
-<br>
-**[Demo Video](https://www.youtube.com/watch?v=T91fXw9dOmM)** | **[Project Page](https://yzmblog.github.io/projects/MonoHuman)**
-| **[Paper](https://arxiv.org/abs/2304.02001)**
+## Prerequisites
+Before you begin, ensure you have a Google account and access to Google Colab.
 
-This is an official implementation of MonoHuman using [PyTorch](https://pytorch.org/)
+## Installation Steps
 
->Animating virtual avatars with free-view control is crucial for various applications like virtual reality and digital entertainment. Previous studies attempt to utilize the representation power of neural radiance field (NeRF) to reconstruct the human body from monocular videos. Recent works propose to graft a deformation network into the NeRF to further model the dynamics of the human neural field for animating vivid human motions. However, such pipelines either rely on pose-dependent representations or fall short of motion coherency due to frame-independent optimization, making it difficult to generalize to unseen pose sequences realistically. In this paper, we propose a novel framework **MonoHuman**, which robustly renders view-consistent and high-fidelity avatars under arbitrary novel poses. Our key insight is to model the deformation field with bi-directional constraints and explicitly leverage the off-the-peg keyframe information to reason the feature correlations for coherent results. In particular, we first propose a Shared Bidirectional Deformation module, which creates a pose-independent generalizable deformation field by disentangling backward and forward deformation correspondences into shared skeletal motion weight and separate non-rigid motions. Then, we devise a Forward Correspondence Search module, which queries the correspondence feature of keyframes to guide the rendering network. The rendered results are thus multi-view consistent with high fidelity, even under challenging novel pose settings. Extensive experiments demonstrate the superiority of proposed MonoHuman over state-of-the-art methods.
-
-
-
-## Installation
-
-We recommend to use [Anaconda](https://www.anaconda.com/).
-
-Create and activate a virtual environment.
-
-    conda env create -f environment.yaml
-    conda activate Monohuman
-
-### `Download SMPL model`
-
-Download the gender neutral SMPL model from [here](https://smplify.is.tue.mpg.de/), and unpack **mpips_smplify_public_v2.zip**.
-
-Copy the smpl model.
-
-    cp /path/to/smpl/smplify_public/code/models/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl third_parties/smpl/models
-
-Follow [this page](https://github.com/vchoutas/smplx/tree/master/tools) to remove Chumpy objects from the SMPL model.
-
-## Run on ZJU-Mocap Dataset
-
-### `Prepare a dataset`
-
-1. Download ZJU-Mocap dataset from [here](https://github.com/zju3dv/neuralbody/blob/master/INSTALL.md#zju-mocap-dataset). 
-
-2. Modify the yaml file of subject at `tools/prepare_zju_mocap/xxx.yaml` as below (Replace the 'xxx' to the subject ID):
-```
-    dataset:
-        zju_mocap_path: /path/to/zju_mocap
-        subject: 'xxx'
-        sex: 'neutral'
-
-...
-```
-3. Run the data preprocessing script.
-```
-    cd tools/prepare_zju_mocap
-    python prepare_dataset.py --cfg xxx.yaml
-    cd ../../
+### Step 1: Install Required Libraries
+Run the following command in a Google Colab cell to install the necessary library:
+```python
+!pip install trimesh
 ```
 
-4. Modify the 'dataset_path' in core/data/dataset_args.py to your /path/to/dataset
-
-### `Training`
-Please replace the 'xxx' to the subject ID
-
-    python train.py --cfg configs/monohuman/zju_mocap/xxx/xxx.yaml resume False
-
-
-### `Rendering and Evalutaion`
-
-Render the motion sequence. (e.g., subject 377)
-
-    python run.py \
-        --type movement \
-        --cfg configs/monohuman/zju_mocap/377/377.yaml 
-
-![video](assets/377_movement.gif)
-
-Render free-viewpoint images on a particular frame (e.g., subject 386 and frame 100).
-
-    python run.py \
-        --type freeview \
-        --cfg configs/monohuman/zju_mocap/386/386.yaml \
-        freeview.frame_idx 100
-![video](assets/386_free.gif)
-
-Render the text driven motion sequence.
-Generate poses sequence from [MDM](https://github.com/GuyTevet/motion-diffusion-model), and put the sequence to `path/to/pose_sequence/sequence.npy` (e.g., subject 394 and backflip)
-
-    python run.py \
-        --type text \
-        --cfg configs/monohuman/zju_mocap/394/394.yaml \
-        text.pose_path path/to/pose_sequence/backflip.npy
-![video](assets/backflip.gif)
-
-## Acknowledgement
-
-Our code took reference from [HumanNeRF](https://github.com/chungyiweng/humannerf), [IBRNet](https://github.com/googleinterns/IBRNet), [Neural Body](https://github.com/zju3dv/neuralbody). We thank these authors for their great works and open-source contribution.
-
-## TODO
-- [x] Code Release.
-- [x] Demo Video Release.
-- [x] Paper Release.
-- [ ] DDP Training.
-- [ ] Pretrained Model Release.
-
-
-<a name="citation"></a>
-## Citation
-If you find this work useful for your research, please consider citing our paper: 
-
-```bibtex
-@inproceedings{yu2023monohuman,
-  title={{MonoHuman}: Animatable Human Neural Field from Monocular Video},
-  author={Yu, Zhengming and Cheng, Wei and Liu, xian and Wu, Wayne and Lin, Kwan-Yee},
-  booktitle={CVPR},
-  year={2023}
-}
+### Step 2: Clone the MonoHuman Repository
+Clone the MonoHuman repository from GitHub:
+```python
+!git clone https://github.com/Yzmblog/MonoHuman
 ```
 
+### Step 3: Add Zjumocap to Google Drive
+1. Visit the Zjumocap Google Drive link: [Zjumocap Drive](https://drive.google.com/drive/u/2/folders/16GgIYBidWL5a9rjcA13oKbX22wTT5xMo)
+2. Add `zjumocap-public` as a shortcut to your Drive account where the Colab notebook is running.
+
+### Step 4: Mount Google Drive
+Mount your Google Drive in the Colab environment:
+```python
+from google.colab import drive
+drive.mount('/content/drive')
+```
+
+### Step 5: Download and Setup the SMPL Model
+1. Download the SMPL model with removed Chumpy objects from [here](https://drive.google.com/file/d/1i_pY4L8LjT6wImakKisS347oJEo81Tvz/view?usp=sharing).
+2. Upload the SMPL model to `MonoHuman/third_parties/smpl/models`.
+
+### Step 6: Modify Data Path
+In the file `MonoHuman/tools/prepare_zju_mocap/377`, change the data path:
+- Find the line `"zju_mocap_path: ../../dataset/zju_mocap"`
+- Change it to `"zju_mocap_path: ../"`
+
+### Step 7: Extract Zjumocap Data
+Run the following code to extract the Zjumocap data:
+```python
+import tarfile
+import shutil
+
+# Define the paths
+source_tar_gz = '/content/drive/MyDrive/zjumocap-public/CoreView_377.tar.gz'
+output_directory = '/content/MonoHuman/tools'
+
+# Extract the .tar.gz file
+with tarfile.open(source_tar_gz, 'r:gz') as tar_ref:
+    tar_ref.extractall(output_directory)
+```
+
+### Step 8: Prepare the Dataset
+Navigate to the dataset preparation directory and run the preparation script:
+```python
+%cd /content/MonoHuman/tools/prepare_zju_mocap/
+!python prepare_dataset.py --cfg 377.yaml
+```
+
+### Step 9: Navigate Back to Project Root
+Return to the project root directory:
+```python
+%cd ../..
+```
+
+### Step 10: Organize Dataset Files
+In `MonoHuman-main/dataset/zju_mocap/377`, move the files out of the folder "0" so that the data structure looks like this:
+- `MonoHuman-main/dataset/zju_mocap/377/images`
+- `MonoHuman-main/dataset/zju_mocap/377/masks`
+- `MonoHuman-main/dataset/zju_mocap/377/cameras.pkl`
+
+### Step 11: Modify Network.py File
+In `MonoHuman/core/nets/monohuman/network.py`, change the following lines:
+- Line 60: from `p_index = parent[min_index]` to `p_index = parent[min_index.to('cpu')]`
+- Line 81: from `p_index = parent[min_index]` to `p_index = parent[min_index.to('cpu')]`
+
+### Step 12: Training
+Run training using the following command:
+```python
+!python train.py --cfg configs/monohuman/zju_mocap/377/377.yaml resume False
+```
+
+### Step 13: Rendering
+Finally, run the rendering process:
+```python
+!python run.py --type movement --cfg configs/monohuman/zju_mocap/377/377.yaml
+```
+
+## Conclusion
+Follow these steps to set up and run the MonoHuman project in Google Colab. For any issues or further information, refer to the official MonoHuman GitHub repository.
