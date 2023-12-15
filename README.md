@@ -106,6 +106,8 @@ The evaluation results for the MonoHuman project are available in the `MonoHuman
 
 4. **streamlit-website.mp4**: A video presentation of a website that showcases the project's implementation, results, steps, and evaluation results. [Watch the Website Video](https://github.com/anurag2108/MonoHuman-Team10/blob/main/assets/streamlit-website.mp4)
 
+5. **experiments-folder**: The weights generated after training for 7 hours is attached below, you can directly download this, upload to the given ipynb, and run the inference command above to generate results. [experiments-folder](https://drive.google.com/file/d/1M9_L9zVlqxzmg4u5k9RJTX_fPJUHLpMx/view)
+
 
 ## Conclusion
 Follow these steps to set up and run the MonoHuman project in Google Colab. For any issues or further information, refer to the official MonoHuman GitHub repository.
